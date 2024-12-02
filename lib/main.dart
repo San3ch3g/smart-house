@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_house/screens/check_pin_screen.dart';
 import 'package:smart_house/screens/create_pin_screen.dart';
 import 'package:smart_house/screens/home_screen.dart';
 import 'package:smart_house/screens/login_screen.dart';

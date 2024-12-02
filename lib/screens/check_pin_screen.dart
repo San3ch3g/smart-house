@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class CreatePinScreen extends StatefulWidget {
+class CheckPinScreen extends StatefulWidget {
   @override
-  _CreatePinScreenState createState() => _CreatePinScreenState();
+  _CheckPinScreenState createState() => _CheckPinScreenState();
 }
 
-class _CreatePinScreenState extends State<CreatePinScreen> {
+class _CheckPinScreenState extends State<CheckPinScreen> {
   final _pinController = TextEditingController();
   List<bool> _pinFilled = [false, false, false, false];
+  final String _savedPin = '1234'; // Замените на сохраненный PIN-код
 
   void _onNumberPressed(String number) {
     if (_pinController.text.length < 4) {
@@ -27,10 +28,24 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     }
   }
 
-  void _onSavePressed() {
+  void _onCheckPressed() {
     if (_pinController.text.length == 4) {
-      print('PIN saved: ${_pinController.text}'); // Вывод в консоль
+      print('Введенный PIN-код: ${_pinController.text}'); // Вывод в консоль
+      if (_pinController.text == _savedPin) {
+        _showSnackBar('PIN-код верный');
+      } else {
+        _showSnackBar('Неверный PIN-код');
+      }
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -43,7 +58,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Создание PIN-кода'),
+        title: Text('Проверка PIN-кода'),
       ),
       body: Stack(
         children: <Widget>[
@@ -121,13 +136,13 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
-                    onPressed: _onSavePressed,
+                    onPressed: _onCheckPressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF984E4F),
                       foregroundColor: Colors.white,
                       textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    child: Text('Сохранить PIN-код'),
+                    child: Text('Проверить PIN-код'),
                   ),
                 ),
               ],
