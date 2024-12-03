@@ -8,7 +8,7 @@ class CheckPinScreen extends StatefulWidget {
 class _CheckPinScreenState extends State<CheckPinScreen> {
   final _pinController = TextEditingController();
   List<bool> _pinFilled = [false, false, false, false];
-  final String _savedPin = '1234'; // Замените на сохраненный PIN-код
+  final String _savedPin = '1234';
 
   void _onNumberPressed(String number) {
     if (_pinController.text.length < 4) {
@@ -30,7 +30,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
 
   void _onCheckPressed() {
     if (_pinController.text.length == 4) {
-      print('Введенный PIN-код: ${_pinController.text}'); // Вывод в консоль
+      print('Введенный PIN-код: ${_pinController.text}');
       if (_pinController.text == _savedPin) {
         _showSnackBar('PIN-код верный');
       } else {
@@ -116,9 +116,9 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
                   child: GridView.count(
                     shrinkWrap: true,
                     crossAxisCount: 3,
-                    childAspectRatio: 1.5, // Уменьшаем размер кнопок
-                    mainAxisSpacing: 8.0, // Добавляем отступы между кнопками
-                    crossAxisSpacing: 8.0, // Добавляем отступы между кнопками
+                    childAspectRatio: 1.5,
+                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 8.0,
                     children: List.generate(12, (index) {
                       if (index == 9) {
                         return Container();

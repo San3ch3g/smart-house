@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart'; // Импортируем HomeScreen
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Устанавливаем белый фон
+      backgroundColor: Colors.white,
       body: Center(
         child: Image.asset('assets/splash_screen_image.png'),
       ),

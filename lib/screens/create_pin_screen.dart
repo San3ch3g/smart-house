@@ -29,7 +29,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
   void _onSavePressed() {
     if (_pinController.text.length == 4) {
-      print('PIN saved: ${_pinController.text}'); // Вывод в консоль
+      print('PIN saved: ${_pinController.text}');
     }
   }
 
@@ -101,9 +101,9 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                   child: GridView.count(
                     shrinkWrap: true,
                     crossAxisCount: 3,
-                    childAspectRatio: 1.5, // Уменьшаем размер кнопок
-                    mainAxisSpacing: 8.0, // Добавляем отступы между кнопками
-                    crossAxisSpacing: 8.0, // Добавляем отступы между кнопками
+                    childAspectRatio: 1.5,
+                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 8.0,
                     children: List.generate(12, (index) {
                       if (index == 9) {
                         return Container();
