@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 
-class MainRoomScreen extends StatelessWidget {
+class MainRoomScreen extends StatefulWidget {
+  @override
+  _MainRoomScreenState createState() => _MainRoomScreenState();
+}
+
+class _MainRoomScreenState extends State<MainRoomScreen> {
+  final Map<String, String> _roomImages = {
+    'Гостиная': 'assets/living_room_type_image.png',
+    'Кухня': 'assets/kitchen_type_image.png',
+    'Ванная': 'assets/bathroom_type_image.png',
+    'Кабинет': 'assets/cabinet_type_image.png',
+    'Спальня': 'assets/bedroom_type_image.png',
+    'Зал': 'assets/hall_type_image.png',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,13 +63,12 @@ class MainRoomScreen extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: <Widget>[
-                _buildRoomButton('Гостиная', 'assets/living_room_image.png'),
-                SizedBox(height: 16.0),
-                _buildRoomButton('Кухня', 'assets/kitchen_image.png'),
-                SizedBox(height: 16.0),
-                _buildRoomButton('Ванная', 'assets/bathroom_image.png'),
-              ],
+              children: _roomImages.keys.map((roomName) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: _buildRoomButton(roomName),
+                );
+              }).toList(),
             ),
           ),
         ],
@@ -89,7 +102,7 @@ class MainRoomScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRoomButton(String roomName, String imagePath) {
+  Widget _buildRoomButton(String roomName) {
     return Container(
       height: 150.0,
       decoration: BoxDecoration(
@@ -111,14 +124,21 @@ class MainRoomScreen extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Image.asset(
-              imagePath,
-              width: 100.0,
-              height: 100.0,
-              fit: BoxFit.cover,
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Color(0xFF0B50A0),
+                BlendMode.srcIn,
+              ),
+              child: Image.asset(
+                _roomImages[roomName]!,
+                width: 100.0,
+                height: 100.0,
+                fit: BoxFit.cover,
+              ),
             ),
-            SizedBox(width: 16.0),
+            SizedBox(width: 8.0),
             Text(roomName),
           ],
         ),
