@@ -19,6 +19,7 @@ class _MainRoomScreenState extends State<MainRoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -37,7 +38,7 @@ class _MainRoomScreenState extends State<MainRoomScreen> {
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              print('Нажата кнопка настроек');
+              Navigator.pushNamed(context, '/edit_profile');
             },
           ),
         ],
@@ -75,7 +76,7 @@ class _MainRoomScreenState extends State<MainRoomScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('Нажата кнопка добавить');
+          Navigator.pushNamed(context, '/add_room');
         },
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(0xFF0B50A0),
@@ -87,7 +88,13 @@ class _MainRoomScreenState extends State<MainRoomScreen> {
   Widget _buildCategoryButton(String label) {
     return ElevatedButton(
       onPressed: () {
-        print('Выбрана категория: $label');
+        if (label == 'Комнаты') {
+          // Ничего не делаем, так как мы уже на этом экране
+        } else if (label == 'Устройства') {
+          Navigator.pushNamed(context, '/devices');
+        } else if (label == 'Пользователь') {
+          Navigator.pushNamed(context, '/users');
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFF0B50A0),

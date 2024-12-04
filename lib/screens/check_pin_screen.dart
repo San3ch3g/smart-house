@@ -33,6 +33,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
       print('Введенный PIN-код: ${_pinController.text}');
       if (_pinController.text == _savedPin) {
         _showSnackBar('PIN-код верный');
+        Navigator.pushReplacementNamed(context, '/add_address');
       } else {
         _showSnackBar('Неверный PIN-код');
       }

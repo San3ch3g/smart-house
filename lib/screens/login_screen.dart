@@ -19,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      print('Email: ${_emailController.text}');
-      print('Password: ${_emailController.text}');
+      // Здесь можно добавить логику для проверки данных входа
+      Navigator.pushReplacementNamed(context, '/check_pin');
     }
   }
 
@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextButton(
                     onPressed: () {
-                      print('Регистрация');
+                      Navigator.pushReplacementNamed(context, '/registration');
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Color(0xFF2A2A37),

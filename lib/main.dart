@@ -29,7 +29,22 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MainRoomScreen() ,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/login': (context) => LoginScreen(),
+        '/registration': (context) => RegistrationScreen(),
+        '/create_pin': (context) => CreatePinScreen(),
+        '/check_pin': (context) => CheckPinScreen(),
+        '/add_address': (context) => AddAddressScreen(),
+        '/main_room': (context) => MainRoomScreen(),
+        '/users': (context) => UsersScreen(),
+        '/devices': (context) => DevicesScreen(),
+        '/add_room': (context) => AddRoomScreen(),
+        '/add_device': (context) => AddDeviceScreen(),
+        '/add_user': (context) => AddUserScreen(),
+        '/edit_profile': (context) => ProfileScreen()
+      },
     );
   }
 }

@@ -21,9 +21,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      print('Username: ${_usernameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
+      // Здесь можно добавить логику для сохранения данных регистрации
+      Navigator.pushReplacementNamed(context, '/create_pin');
     }
   }
 
@@ -140,7 +139,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextButton(
                     onPressed: () {
-                      print('Войти');
+                      Navigator.pushReplacementNamed(context, '/login');
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Color(0xFF2A2A37),

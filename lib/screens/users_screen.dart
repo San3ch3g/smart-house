@@ -5,6 +5,7 @@ class UsersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -23,7 +24,7 @@ class UsersScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              print('Нажата кнопка настроек');
+              Navigator.pushNamed(context, '/edit_profile');
             },
           ),
         ],
@@ -37,11 +38,11 @@ class UsersScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
-                  _buildCategoryButton('Комнаты'),
+                  _buildCategoryButton(context, 'Комнаты'),
                   SizedBox(width: 8.0),
-                  _buildCategoryButton('Устройства'),
+                  _buildCategoryButton(context, 'Устройства'),
                   SizedBox(width: 8.0),
-                  _buildCategoryButton('Пользователь'),
+                  _buildCategoryButton(context, 'Пользователь'),
                 ],
               ),
             ),
@@ -60,7 +61,7 @@ class UsersScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('Нажата кнопка добавить');
+          Navigator.pushNamed(context, '/add_user');
         },
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(0xFF0B50A0),
@@ -69,10 +70,16 @@ class UsersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryButton(String label) {
+  Widget _buildCategoryButton(BuildContext context, String label) {
     return ElevatedButton(
       onPressed: () {
-        print('Выбрана категория: $label');
+        if (label == 'Комнаты') {
+          Navigator.pushNamed(context, '/main_room');
+        } else if (label == 'Устройства') {
+          Navigator.pushNamed(context, '/devices');
+        } else if (label == 'Пользователь') {
+          // Ничего не делаем, так как мы уже на этом экране
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFF0B50A0),

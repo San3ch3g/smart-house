@@ -29,7 +29,8 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
   void _onSavePressed() {
     if (_pinController.text.length == 4) {
-      print('PIN saved: ${_pinController.text}');
+      // Здесь можно добавить логику для сохранения PIN-кода
+      Navigator.pushReplacementNamed(context, '/add_address');
     }
   }
 

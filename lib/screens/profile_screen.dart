@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: Text(
           'Личный кабинет',
-          style: TextStyle(fontSize: 14, color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(0xFF0B50A0),
         leading: IconButton(

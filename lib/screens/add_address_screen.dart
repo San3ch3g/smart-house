@@ -6,20 +6,16 @@ class AddAddressScreen extends StatefulWidget {
 }
 
 class _AddAddressScreenState extends State<AddAddressScreen> {
-  final _cityController = TextEditingController();
-  final _streetController = TextEditingController();
-  final _houseNumberController = TextEditingController();
+  final _addressController = TextEditingController();
 
   void _onSavePressed() {
-    String city = _cityController.text;
-    String street = _streetController.text;
-    String houseNumber = _houseNumberController.text;
+    String address = _addressController.text;
 
-    if (city.isEmpty || street.isEmpty || houseNumber.isEmpty) {
-      _showSnackBar('Пожалуйста, заполните все поля');
+    if (address.isEmpty) {
+      _showSnackBar('Пожалуйста, заполните поле адреса');
     } else {
-      String address = 'г. $city, ул. $street, д. $houseNumber';
       _showSnackBar('Адрес сохранен: $address');
+      Navigator.pushReplacementNamed(context, '/main_room');
     }
   }
 
@@ -34,9 +30,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   @override
   void dispose() {
-    _cityController.dispose();
-    _streetController.dispose();
-    _houseNumberController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
@@ -57,7 +51,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             ),
             SizedBox(height: 16.0),
             TextField(
-              controller: _cityController,
+              controller: _addressController,
               decoration: InputDecoration(
                 labelText: 'Адрес',
                 border: OutlineInputBorder(),

@@ -28,6 +28,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -46,7 +47,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              print('Нажата кнопка настроек');
+              Navigator.pushNamed(context, '/edit_profile');
             },
           ),
         ],
@@ -60,11 +61,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
-                  _buildCategoryButton('Комнаты'),
+                  _buildCategoryButton(context, 'Комнаты'),
                   SizedBox(width: 8.0),
-                  _buildCategoryButton('Устройства'),
+                  _buildCategoryButton(context, 'Устройства'),
                   SizedBox(width: 8.0),
-                  _buildCategoryButton('Пользователь'),
+                  _buildCategoryButton(context, 'Пользователь'),
                 ],
               ),
             ),
@@ -84,7 +85,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('Нажата кнопка добавить');
+          Navigator.pushNamed(context, '/add_device');
         },
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(0xFF0B50A0),
@@ -93,10 +94,15 @@ class _DevicesScreenState extends State<DevicesScreen> {
     );
   }
 
-  Widget _buildCategoryButton(String label) {
+  Widget _buildCategoryButton(BuildContext context, String label) {
     return ElevatedButton(
       onPressed: () {
-        print('Выбрана категория: $label');
+        if (label == 'Комнаты') {
+          Navigator.pushNamed(context, '/main_room');
+        } else if (label == 'Устройства') {
+        } else if (label == 'Пользователь') {
+          Navigator.pushNamed(context, '/users');
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFF0B50A0),
