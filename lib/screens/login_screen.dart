@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Здесь можно добавить логику для проверки данных входа
       Navigator.pushReplacementNamed(context, '/check_pin');
     }
   }
@@ -27,9 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Вход'),
-      ),
       body: Stack(
         children: <Widget>[
           Image.asset(

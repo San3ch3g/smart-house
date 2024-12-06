@@ -29,9 +29,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Регистрация'),
-      ),
       body: Stack(
         children: <Widget>[
           Image.asset(

@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (!_isEditing)
                   ElevatedButton(
                     onPressed: () {
-                      print('Нажата кнопка "Выйти"');
+                      Navigator.pushNamed(context, '/');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
