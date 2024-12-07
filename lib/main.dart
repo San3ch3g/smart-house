@@ -12,11 +12,20 @@ import 'package:smart_house/screens/main_room_screen.dart';
 import 'package:smart_house/screens/profile_screen.dart';
 import 'package:smart_house/screens/registration_screen.dart';
 import 'package:smart_house/screens/users_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://bzzqvauwcgfarujkbhdl.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6enF2YXV3Y2dmYXJ1amtiaGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxMjM5NjEsImV4cCI6MjA0ODY5OTk2MX0.dOhwLseSUc0shJDmbyl1-ArpIUDrWDyGapP0lbhjMso',
+  );
+
+  runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
