@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -27,6 +28,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     print('Пароль: ${_passwordController.text}');
 
     _toggleEditMode();
+  }
+
+  void _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('pin');
+    Navigator.pushNamed(context, '/');
   }
 
   @override
@@ -105,9 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 if (!_isEditing)
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/');
-                    },
+                    onPressed: _logout,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,

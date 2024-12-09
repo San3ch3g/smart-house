@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckPinScreen extends StatefulWidget {
   @override
@@ -8,7 +9,6 @@ class CheckPinScreen extends StatefulWidget {
 class _CheckPinScreenState extends State<CheckPinScreen> {
   final _pinController = TextEditingController();
   List<bool> _pinFilled = [false, false, false, false];
-  final String _savedPin = '1234';
 
   void _onNumberPressed(String number) {
     if (_pinController.text.length < 4) {
@@ -28,12 +28,13 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
     }
   }
 
-  void _onCheckPressed() {
+  void _onCheckPressed() async {
     if (_pinController.text.length == 4) {
-      print('Введенный PIN-код: ${_pinController.text}');
-      if (_pinController.text == _savedPin) {
+      final prefs = await SharedPreferences.getInstance();
+      final savedPin = prefs.getString('pin');
+      if (savedPin != null && _pinController.text == savedPin) {
         _showSnackBar('PIN-код верный');
-        Navigator.pushReplacementNamed(context, '/add_address');
+        Navigator.pushReplacementNamed(context, '/main_room');
       } else {
         _showSnackBar('Неверный PIN-код');
       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePinScreen extends StatefulWidget {
   @override
@@ -27,9 +28,10 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     }
   }
 
-  void _onSavePressed() {
+  void _onSavePressed() async {
     if (_pinController.text.length == 4) {
-      // Здесь можно добавить логику для сохранения PIN-кода
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('pin', _pinController.text);
       Navigator.pushReplacementNamed(context, '/add_address');
     }
   }
