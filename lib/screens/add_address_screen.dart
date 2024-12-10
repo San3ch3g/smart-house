@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_house/server/server.dart'; // Импортируем SupabaseService
 
 class AddAddressScreen extends StatefulWidget {
   @override
@@ -7,15 +9,45 @@ class AddAddressScreen extends StatefulWidget {
 
 class _AddAddressScreenState extends State<AddAddressScreen> {
   final _addressController = TextEditingController();
+  final SupabaseService _supabaseService = SupabaseService();
 
-  void _onSavePressed() {
+  @override
+  void initState() {
+    super.initState();
+    _loadAddress();
+  }
+
+  void _loadAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedAddress = prefs.getString('address');
+    if (savedAddress != null) {
+      setState(() {
+        _addressController.text = savedAddress;
+      });
+    }
+  }
+
+  void _onSavePressed() async {
     String address = _addressController.text;
 
     if (address.isEmpty) {
       _showSnackBar('Пожалуйста, заполните поле адреса');
     } else {
-      _showSnackBar('Адрес сохранен: $address');
-      Navigator.pushReplacementNamed(context, '/main_room');
+      // Сохраняем адрес в локальной памяти
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('address', address);
+
+      // Получаем id пользователя из локального хранилища
+      final userId = prefs.getString('userId');
+
+      if (userId != null) {
+        // Создаем дом в Supabase
+        await _supabaseService.createHouse(ownerId: userId, address: address);
+        _showSnackBar('Адрес сохранен и дом зарегистрирован: $address');
+        Navigator.pushReplacementNamed(context, '/main_room');
+      } else {
+        _showSnackBar('Ошибка: пользователь не найден');
+      }
     }
   }
 

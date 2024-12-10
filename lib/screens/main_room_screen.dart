@@ -18,49 +18,9 @@ class _MainRoomScreenState extends State<MainRoomScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Твой дом',
-              style: TextStyle(color: Colors.white),
-            ),
-            Text(
-              'г. Омск, ул. Ленина, д. 24',
-              style: TextStyle(fontSize: 14, color: Colors.white),
-            ),
-          ],
-        ),
-        backgroundColor: Color(0xFF0B50A0),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/edit_profile');
-            },
-          ),
-        ],
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  _buildCategoryButton('Комнаты'),
-                  SizedBox(width: 8.0),
-                  _buildCategoryButton('Устройства'),
-                  SizedBox(width: 8.0),
-                  _buildCategoryButton('Пользователь'),
-                ],
-              ),
-            ),
-          ),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),

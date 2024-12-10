@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
         '/create_pin': (context) => CreatePinScreen(),
         '/check_pin': (context) => CheckPinScreen(),
         '/add_address': (context) => AddAddressScreen(),
-        '/main_room': (context) => MainRoomScreen(),
-        '/users': (context) => UsersScreen(),
-        '/devices': (context) => DevicesScreen(),
+        '/main_room': (context) => HomeScreen(), // Замените на HomePageScreen
+        '/users': (context) => HomeScreen(),    // Замените на HomePageScreen
+        '/devices': (context) => HomeScreen(),  // Замените на HomePageScreen
         '/add_room': (context) => AddRoomScreen(),
         '/add_device': (context) => AddDeviceScreen(),
         '/add_user': (context) => AddUserScreen(),
