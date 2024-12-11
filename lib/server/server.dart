@@ -3,58 +3,77 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<void> registerUser({
+  Future<AuthResponse> registerUser({
     required String email,
     required String password,
     required String username,
   }) async {
     try {
+      // Регистрация пользователя
       final AuthResponse response = await _supabase.auth.signUp(
         email: email,
         password: password,
       );
 
       if (response.user != null) {
+        print('Пользователь зарегистрирован: ${response.user!.email}');
+
+        // Создание профиля пользователя
         await _supabase.from('profiles').insert({
           'id': response.user!.id,
           'username': username,
           'email': email,
+          'password':password,
         });
+
+        print('Профиль пользователя создан');
+      } else {
+        print('Ошибка: пользователь не зарегистрирован');
       }
+
+      return response;
     } catch (error) {
       print('Ошибка при регистрации: $error');
       rethrow;
     }
   }
-
-  Future<void> loginUser({
+  Future<AuthResponse> loginUser({
     required String email,
     required String password,
   }) async {
     try {
+      // Вход пользователя
       final AuthResponse response = await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
       if (response.user != null) {
-        print('Пользователь авторизован: ${response.user!.email}');
+        print('Пользователь вошел в систему: ${response.user!.email}');
+      } else {
+        print('Ошибка: пользователь не вошел в систему');
       }
+
+      return response;
     } catch (error) {
-      print('Ошибка при авторизации: $error');
+      print('Ошибка при входе: $error');
       rethrow;
     }
   }
-
   Future<void> createHouse({
     required String ownerId,
     required String address,
   }) async {
     try {
+      print('Создание дома для пользователя: $ownerId, адрес: $address');
+
+      // Создание дома
       await _supabase.from('house').insert({
         'ownerid': ownerId,
         'address': address,
       });
+
+      print('Дом успешно создан');
     } catch (error) {
       print('Ошибка при создании дома: $error');
       rethrow;

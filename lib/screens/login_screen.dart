@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_house/server/server.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,6 +12,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final SupabaseService _supabaseService = SupabaseService();
 
   @override
   void dispose() {
@@ -17,10 +21,41 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, '/check_pin');
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      try {
+        // Вход пользователя
+        final AuthResponse response = await _supabaseService.loginUser(
+          email: email,
+          password: password,
+        );
+
+        if (response.user != null) {
+          // Сохранение userId (UUID) в локальное хранилище
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('userId', response.user!.id);
+
+          // Переход к следующему экрану (например, главному экрану)
+          Navigator.pushReplacementNamed(context, '/main_room');
+        } else {
+          _showSnackBar('Ошибка при входе: Пользователь не найден');
+        }
+      } catch (error) {
+        _showSnackBar('Ошибка при входе: $error');
+      }
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override

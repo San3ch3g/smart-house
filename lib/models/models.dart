@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 
+// Модель для таблицы profiles
 class Profile {
   final String id;
   final String username;

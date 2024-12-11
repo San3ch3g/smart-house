@@ -37,14 +37,18 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('address', address);
 
-      // Получаем id пользователя из локального хранилища
+      // Получаем userId (UUID) из локального хранилища
       final userId = prefs.getString('userId');
 
       if (userId != null) {
         // Создаем дом в Supabase
-        await _supabaseService.createHouse(ownerId: userId, address: address);
-        _showSnackBar('Адрес сохранен и дом зарегистрирован: $address');
-        Navigator.pushReplacementNamed(context, '/main_room');
+        try {
+          await _supabaseService.createHouse(ownerId: userId, address: address);
+          _showSnackBar('Адрес сохранен и дом зарегистрирован: $address');
+          Navigator.pushReplacementNamed(context, '/main_room');
+        } catch (error) {
+          _showSnackBar('Ошибка при создании дома: $error');
+        }
       } else {
         _showSnackBar('Ошибка: пользователь не найден');
       }

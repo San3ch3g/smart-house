@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_house/server/server.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final SupabaseService _supabaseService = SupabaseService();
 
   @override
   void dispose() {
@@ -19,11 +23,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Здесь можно добавить логику для сохранения данных регистрации
-      Navigator.pushReplacementNamed(context, '/create_pin');
+      String username = _usernameController.text;
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      try {
+        // Регистрация пользователя
+        final AuthResponse response = await _supabaseService.registerUser(
+          email: email,
+          password: password,
+          username: username,
+        );
+
+        if (response.user != null) {
+          // Сохранение userId (UUID) в локальное хранилище
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('userId', response.user!.id); // Используем UUID
+
+          // Переход к созданию PIN-кода
+          Navigator.pushReplacementNamed(context, '/create_pin');
+        } else {
+          _showSnackBar('Ошибка при регистрации: Пользователь не создан');
+        }
+      } catch (error) {
+        _showSnackBar('Ошибка при регистрации: $error');
+      }
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
