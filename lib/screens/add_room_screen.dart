@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_house/server/server.dart'; // Импорт SupabaseService
 
 class AddRoomScreen extends StatefulWidget {
   @override
@@ -7,9 +9,13 @@ class AddRoomScreen extends StatefulWidget {
 
 class _AddRoomScreenState extends State<AddRoomScreen> {
   final _roomNameController = TextEditingController();
-  String _selectedRoomType = 'Гостиная';
+  String _selectedRoomType = 'Гостиная'; // Выбранный тип комнаты
+  Map<String, String> _roomTypes = {}; // Карта типов комнат (название -> id)
+  final SupabaseService _supabaseService = SupabaseService();
+  String? _houseId; // ID дома
 
-  final Map<String, String> _roomTypes = {
+  // Карта изображений для типов комнат
+  final Map<String, String> _roomImages = {
     'Гостиная': 'assets/living_room_type_image.png',
     'Кухня': 'assets/kitchen_type_image.png',
     'Ванная': 'assets/bathroom_type_image.png',
@@ -18,14 +24,77 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
     'Зал': 'assets/hall_type_image.png',
   };
 
-  void _onSavePressed() {
+  @override
+  void initState() {
+    super.initState();
+    _loadHouseId(); // Загружаем houseId из локального хранилища
+    _fetchRoomTypes(); // Получаем типы комнат из базы данных
+  }
+
+  // Метод для загрузки houseId из локального хранилища
+  Future<void> _loadHouseId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final houseId = prefs.getString('houseId');
+    if (houseId != null) {
+      setState(() {
+        _houseId = houseId;
+      });
+    } else {
+      print('Ошибка: houseId не найден в локальном хранилище');
+    }
+  }
+
+  // Метод для получения типов комнат из базы данных
+  Future<void> _fetchRoomTypes() async {
+    try {
+      final roomTypes = await _supabaseService.getRoomTypes();
+      setState(() {
+        // Создаем карту типов комнат (название -> id)
+        _roomTypes = {
+          for (var roomType in roomTypes)
+            roomType['roomtypename']: roomType['id']
+        };
+      });
+    } catch (error) {
+      print('Ошибка при получении типов комнат: $error');
+    }
+  }
+
+  // Метод для сохранения комнаты в базе данных
+  Future<void> _onSavePressed() async {
     String roomName = _roomNameController.text;
     String roomType = _selectedRoomType;
 
     if (roomName.isEmpty) {
       _showSnackBar('Пожалуйста, введите название комнаты');
-    } else {
-      _showSnackBar('Комната сохранена: $roomName, тип: $roomType');
+      return;
+    }
+
+    if (_houseId == null) {
+      _showSnackBar('Ошибка: houseId не найден');
+      return;
+    }
+
+    // Получаем id типа комнаты по его названию
+    final roomTypeId = _roomTypes[roomType];
+
+    if (roomTypeId == null) {
+      _showSnackBar('Ошибка: тип комнаты не найден');
+      return;
+    }
+
+    try {
+      // Создаем комнату в базе данных
+      await _supabaseService.createRoom(
+        houseId: _houseId!,
+        roomName: roomName,
+        roomTypeId: roomTypeId,
+      );
+
+      _showSnackBar('Комната успешно создана: $roomName');
+      Navigator.pop(context); // Возвращаемся на предыдущий экран
+    } catch (error) {
+      _showSnackBar('Ошибка при создании комнаты: $error');
     }
   }
 
@@ -49,8 +118,8 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Добавить комнату',
-            style: TextStyle(fontSize: 14, color: Colors.white)
+          'Добавить комнату',
+          style: TextStyle(fontSize: 14, color: Colors.white),
         ),
         backgroundColor: Color(0xFF0B50A0),
         leading: IconButton(
@@ -107,7 +176,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        _roomTypes[roomType]!,
+                        _roomImages[roomType]!,
                         width: 80.0,
                         height: 80.0,
                         fit: BoxFit.cover,

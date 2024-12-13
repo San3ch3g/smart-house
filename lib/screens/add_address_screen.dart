@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_house/server/server.dart'; // Импортируем SupabaseService
+import 'package:smart_house/server/server.dart';
 
 class AddAddressScreen extends StatefulWidget {
   @override
@@ -37,14 +37,22 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('address', address);
 
-      // Получаем userId (UUID) из локального хранилища
       final userId = prefs.getString('userId');
 
       if (userId != null) {
-        // Создаем дом в Supabase
         try {
           await _supabaseService.createHouse(ownerId: userId, address: address);
           _showSnackBar('Адрес сохранен и дом зарегистрирован: $address');
+
+          final houseId = await _supabaseService.getHouseIdByAddress(address);
+
+          if (houseId != null) {
+            await prefs.setString('houseId', houseId);
+            _showSnackBar('House ID сохранен: $houseId');
+          } else {
+            _showSnackBar('Ошибка: house ID не найден');
+          }
+
           Navigator.pushReplacementNamed(context, '/main_room');
         } catch (error) {
           _showSnackBar('Ошибка при создании дома: $error');

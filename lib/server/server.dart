@@ -3,13 +3,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
+
   Future<AuthResponse> registerUser({
     required String email,
     required String password,
     required String username,
   }) async {
     try {
-      // Регистрация пользователя
       final AuthResponse response = await _supabase.auth.signUp(
         email: email,
         password: password,
@@ -18,7 +18,6 @@ class SupabaseService {
       if (response.user != null) {
         print('Пользователь зарегистрирован: ${response.user!.email}');
 
-        // Создание профиля пользователя
         await _supabase.from('profiles').insert({
           'id': response.user!.id,
           'username': username,
@@ -42,7 +41,6 @@ class SupabaseService {
     required String password,
   }) async {
     try {
-      // Вход пользователя
       final AuthResponse response = await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
@@ -67,7 +65,6 @@ class SupabaseService {
     try {
       print('Создание дома для пользователя: $ownerId, адрес: $address');
 
-      // Создание дома
       await _supabase.from('house').insert({
         'ownerid': ownerId,
         'address': address,
@@ -213,4 +210,46 @@ class SupabaseService {
       rethrow;
     }
   }
+  Future<String?> getHouseIdByAddress(String address) async {
+    try {
+      // Запрос к таблице house для получения house id по адресу
+      final response = await _supabase
+          .from('house')
+          .select('id')
+          .eq('address', address)
+          .single();
+
+      if (response != null) {
+        final houseId = response['id'] as String;
+        return houseId; // Возвращаем house id
+      } else {
+        print('Дом с адресом $address не найден');
+        return null; // Если дом не найден, возвращаем null
+      }
+    } catch (error) {
+      print('Ошибка при получении house id: $error');
+      rethrow;
+    }
+
+    }
+  Future<String?> getRoomTypeNameById(String roomTypeId) async {
+    try {
+      final response = await _supabase
+          .from('roomtype')
+          .select('roomtypename')
+          .eq('id', roomTypeId)
+          .single();
+
+      if (response != null) {
+        return response['roomtypename'] as String;
+      } else {
+        print('Тип комнаты с ID $roomTypeId не найден');
+        return null;
+      }
+    } catch (error) {
+      print('Ошибка при получении имени типа комнаты: $error');
+      rethrow;
+    }
+  }
 }
+
